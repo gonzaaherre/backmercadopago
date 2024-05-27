@@ -25,10 +25,6 @@ public class MercadoPagoController {
         if (pedido == null) {
             return "error json";
         }
-        Long id = pedido.getId();
-        String idString = id.toString();
-        Double price = pedido.getTotalPedido();
-        System.out.println(idString);
 
         /*
         *  List<PreferenceItemRequest> items = new ArrayList<>();
@@ -51,17 +47,23 @@ public class MercadoPagoController {
             //Creamos la preferencia
             //PREFERENCIA DE VENTA
             PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
-                    .id(idString)
-                    .unitPrice(new BigDecimal(price))
+                    .id("1234")//id hardcodeado
+                    .title("compra producto")
+                    .description("Pedido realizado desde el carrito de compras")
+                    .pictureUrl("https://acdn.mitiendanube.com/stores/813/752/products/spruce41-31-d9af8e704d16b81a9216426267078691-1024-1024.jpg")
+                    .quantity(1)
+                    .currencyId("ARG")
+                    .unitPrice(new BigDecimal(pedido.getTotalPedido()))
                     .build();
             List<PreferenceItemRequest> items = new ArrayList<>();
             items.add(itemRequest);
 
             //preferencia de control de sucesos en el caso que toque lo redirecciona a otra pagna
+            //aca no pueden ir url localesm, pero hacemos una excepcion
             PreferenceBackUrlsRequest backUrls = PreferenceBackUrlsRequest.builder()
-                    .success("https://www.youtube.com/watch?v=mCdA4bJAGGk&ab_channel=sweetblue.")
-                    .pending("https://www.youtube.com/watch?v=OiSo6jEEuqM&ab_channel=TheLaPlanta")
-                    .failure("https://youtu.be/Flmg8uYMGZQ?si=5I1zl_P5n8IiSiiU")
+                    .success("http://localhost:5173/instrumentos")
+                    .pending("http://localhost:5173/instrumentos")
+                    .failure("http://localhost:5173/instrumentos")
                     .build();
 
             //preferencia que tendra todas las preferencias que se hayan creado
