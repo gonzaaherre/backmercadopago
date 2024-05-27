@@ -1,5 +1,6 @@
 package com.gonza.carrito.Controller;
 import com.gonza.carrito.Entity.Dto.PedidoDto;
+import com.gonza.carrito.Entity.MpPreference;
 import com.gonza.carrito.Entity.Pedido;
 import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
@@ -21,10 +22,7 @@ import java.util.List;
 public class MercadoPagoController {
 
     @PostMapping
-    public String getList(@RequestBody Pedido pedido) {
-        if (pedido == null) {
-            return "error json";
-        }
+    public MpPreference getList(@RequestBody Pedido pedido) {
 
         /*
         *  List<PreferenceItemRequest> items = new ArrayList<>();
@@ -76,7 +74,12 @@ public class MercadoPagoController {
             PreferenceClient client = new PreferenceClient();
             //se crea una nueeva prefertencia que es igual a lla respuesta
             Preference preference = client.create(preferenceRequest);
-            return preference.getId();
+
+
+            MpPreference mpPreference = new MpPreference();
+            mpPreference.setStatusCode(preference.getResponse().getStatusCode());
+            mpPreference.setId(preference.getId());
+            return mpPreference;
 
 
         } catch (MPException e) {
